@@ -1,0 +1,78 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+    <style>
+        body {
+            background-color: black;
+        }
+    </style>
+</head>
+
+<body>
+    <center>
+        <div><img src="img/AGTupper.png" id="red x 1">
+            <img src="img/AGTupper.png" id="red x 2">
+            <img src="img/AGTupper.png" id="red x 3">
+            <img src="img/AGTupper.png" id="red x 4">
+        </div>
+        <iframe id="music" width="852" height="480" src="https://www.youtube.com/embed/lrJz9Dh5MsM?rel=1&amp;controls=1&amp;showinfo=0&amp;start=1&autoplay=1&enablejsapi=1" frameborder="0" allow="autoplay; encrypted-media" allowfullscreen></iframe>
+        <div><img src="img/AGTlower.png" id="red buzzer 1" onclick="buzzed('1'); ">
+            <img src="img/AGTlower.png" id="red buzzer 2" onclick="buzzed('2'); ">
+            <img src="img/AGTlower.png" id="red buzzer 3" onclick="buzzed('3'); ">
+            <img src="img/AGTlower.png" id="red buzzer 4" onclick="buzzed('4'); ">
+        </div>
+    </center>
+
+    <script>
+        //create the script for the API and append it to the DOM
+        var tag = document.createElement('script')
+        tag.src = 'https://www.youtube.com/iframe_api'
+        var firstScriptTag = document.getElementsByTagName('script')[0]
+        firstScriptTag.parentNode.insertBefore(tag, firstScriptTag)
+
+        var player
+
+        function onYouTubeIframeAPIReady() {
+            player = new YT.Player('music', {
+                events: {
+                    'onReady': onPlayerReady
+                }
+            })
+        }
+
+        function onPlayerReady(event) {
+            document.getElementById('button').addEventListener('click', function() {
+                player.pauseVideo()
+            })
+        }
+
+        var counter = 0
+
+        function buzzed(num) {
+            let image = document.getElementById("red x " + num).src
+
+            if (image.includes("img/AGTupper.png")) {
+                counter++
+
+                document.getElementById("red x " + num).src = "img/AGTbuzzed.png"
+                document.getElementById("red buzzer " + num).src = "img/AGTpressed.png"
+
+                let sound = new Audio(counter == 4 ? "audio/buzzer2.wav" : "audio/buzzer.wav")
+                sound.play()
+
+                if (counter == 4) {
+                    console.log("that's 4 red X's")
+                    player.pauseVideo()
+                }
+            } else {
+                console.log("already buzzed")
+                return
+            }
+
+            console.log(counter)
+        }
+    </script>
+</body>
+
+</html>
